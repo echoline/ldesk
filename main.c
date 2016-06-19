@@ -60,7 +60,7 @@ main (int argc, char **argv)
 
 	gtk_widget_set_size_request (root, width, height);
 
-	desktop = gtk_ldesk_new ();
+	desktop = gtk_ldesk_new (panes);
 	gtk_container_add (GTK_CONTAINER (root), desktop);
 
 	widget = GTK_WIDGET(gtk_clock_new ());

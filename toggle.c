@@ -38,10 +38,10 @@ gtk_spacebutton_toggled (GtkWidget *spacebutton, gpointer index)
 	gint i;
 
 	if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (
-					bttns[(gint)index])))
+					bttns[(gsize)index])))
 		for (i = 0; i < 3; i++)
 		{
-			if (i == (gint)index)
+			if (i == (gsize)index)
 			{
 				gtk_widget_show (panes[i]);
 				gtk_widget_hide (panes[3]);
@@ -54,7 +54,7 @@ gtk_spacebutton_toggled (GtkWidget *spacebutton, gpointer index)
 			}
 		}
 	else {
-		gtk_widget_hide (panes[(gint)index]);
+		gtk_widget_hide (panes[(gsize)index]);
 		gtk_widget_show (panes[3]);
 	}
 
@@ -72,7 +72,7 @@ gtk_spacebutton_class_init (GtkSpaceButtonClass *klass)
 static void
 gtk_spacebutton_init (GtkSpaceButton *spacebutton)
 {
-	static index = 0;
+	static gsize index = 0;
 
 	gtk_widget_set_has_window (GTK_WIDGET (spacebutton), FALSE);
 
