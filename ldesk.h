@@ -44,5 +44,7 @@ struct _GtkLDeskClass
 GtkWidget* gtk_ldesk_new (gint width, gint height);
 void gtk_ldesk_refresh_box (GtkWidget *ldesk);
 void gtk_ldesk_update_buttons(GtkWidget *ldesk, gsize index);
+gint gtk_ldesk_get_width (GtkLDesk *ldesk);
+gint gtk_ldesk_get_height (GtkLDesk *ldesk);
 
 #endif // __LDESK_H

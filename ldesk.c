@@ -121,6 +121,24 @@ gtk_ldesk_update_buttons(GtkWidget *ldesk, gsize index)
 	}
 }
 
+gint
+gtk_ldesk_get_width (GtkLDesk *ldesk)
+{
+//	GtkLDeskPrivate *priv = GTK_LDESK_GET_PRIVATE (GTK_LDESK (ldesk));
+
+	return 1200;
+	//return priv->width;
+}
+
+gint
+gtk_ldesk_get_height (GtkLDesk *ldesk)
+{
+//	GtkLDeskPrivate *priv = GTK_LDESK_GET_PRIVATE (GTK_LDESK (ldesk));
+
+	return 900;
+	//return priv->height;
+}
+
 GtkWidget*
 gtk_ldesk_new (gint width, gint height)
 {
@@ -139,7 +157,7 @@ gtk_ldesk_new (gint width, gint height)
 	gtk_fixed_put (GTK_FIXED (desktop), widget, 25, 25);
 
 	box = GTK_WIDGET (gtk_box_new (GTK_ORIENTATION_HORIZONTAL, TRUE));
-	priv->panes[0] = gtk_glitz_new ();
+	priv->panes[0] = gtk_glitz_new (desktop);
 	priv->panes[1] = gtk_rprts_new ();
 	gtk_container_add (GTK_CONTAINER (box), priv->panes[0]);
 	gtk_container_add (GTK_CONTAINER (box), priv->panes[1]);

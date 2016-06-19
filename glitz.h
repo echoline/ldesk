@@ -41,6 +41,6 @@ struct _GtkGlitzClass
 #define GTK_IS_GLITZ_CLASS(obj)	(G_TYPE_CHECK_CLASS_TYPE ((obj), GTK_TYPE_GLITZ))
 #define GTK_GLITZ_GET_CLASS	(G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_GLITZ, GtkGlitzClass))
 
-GtkWidget* gtk_glitz_new (void);
+GtkWidget* gtk_glitz_new (GtkWidget*);
 
 #endif // __GLITZ_H

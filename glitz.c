@@ -14,47 +14,62 @@
  *  along with LDesk.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "glitz.h"
-#include "image.h"
-
-static char *lines[] = { "ALL SYSTEMS TREKKED OUT",
-			 "(AUTHOR OF PICTURE NOT ON FILE:",
-			 "PLEASE CONTACT ME FOR RECOGNITION)",
-			NULL };
+#include "ldesk.h"
 
 G_DEFINE_TYPE (GtkGlitz, gtk_glitz, GTK_TYPE_DRAWING_AREA);
+
+typedef struct _GtkGlitzPrivate GtkGlitzPrivate;
+
+struct _GtkGlitzPrivate
+{
+	GdkPixbuf *pixbuf;
+	gint height;
+	gint width;
+	GtkWidget *ldesk;
+};
+
+#define GTK_GLITZ_GET_PRIVATE(obj)	(G_TYPE_INSTANCE_GET_PRIVATE ((obj), GTK_TYPE_GLITZ, GtkGlitzPrivate))
+
+static GdkPixbuf*
+load_background (gchar *image_name, gint width, gint height)
+{
+	GdkPixbufLoader *loader;
+	gchar *data;
+	gsize length;
+	GdkPixbuf *pixbuf = NULL;
+	GError *error = NULL;
+
+	if (g_file_get_contents (image_name, &data, &length, NULL))
+	{
+		loader = gdk_pixbuf_loader_new ();
+		gdk_pixbuf_loader_set_size (loader, width, height);
+		gdk_pixbuf_loader_write (loader, data, length, &error);
+		pixbuf = gdk_pixbuf_loader_get_pixbuf (loader);
+	}
+
+	return pixbuf;
+}
 
 static gboolean
 gtk_glitz_draw (GtkWidget *glitz, cairo_t *cr)
 {
-	GdkPixbuf *pixbuf;
-	gint x, y, i;
-	gint width = gtk_widget_get_allocated_width (glitz);
-	gint height = gtk_widget_get_allocated_height (glitz);
-	cairo_text_extents_t extents;
+	GtkGlitzPrivate *priv = GTK_GLITZ_GET_PRIVATE (glitz);
 
-	pixbuf = gdk_pixbuf_new_from_xpm_data ((const char**)image_xpm);
-	x = 100;
-	y = (height - gdk_pixbuf_get_height (pixbuf) - 100) / 2;
-	gdk_cairo_set_source_pixbuf (cr, pixbuf, x, y);
-	cairo_paint (cr);
+	gint width = gtk_widget_get_allocated_width (GTK_WIDGET (glitz));
+	gint height = gtk_widget_get_allocated_height (GTK_WIDGET (glitz));
 
-	x += gdk_pixbuf_get_width (pixbuf);
-	y += 100;
-	cairo_set_source_rgb (cr, 1, .6, 0);
-	cairo_set_font_size (cr, 30);
-	i = 0;
-	while (lines[i])
-	{
-		cairo_move_to (cr, x, y);
-		cairo_text_extents (cr, lines[i], &extents);
-		cairo_show_text (cr, lines[i]);
-		y += 40;
-		i++;
+	if (width != priv->width || height != priv->height) {
+		gdk_pixbuf_scale_simple (priv->pixbuf, width, height,
+							GDK_INTERP_HYPER);
+		priv->width = width;
+		priv->height = height;
 	}
 
-	g_object_unref (pixbuf);
+	gdk_cairo_set_source_pixbuf (cr, priv->pixbuf, 0, 0);
+	cairo_rectangle (cr, 0, 0, priv->width, priv->height); 
+	cairo_fill (cr);
 
-	return FALSE;
+	return TRUE;
 }
 
 static void
@@ -63,16 +78,31 @@ gtk_glitz_class_init (GtkGlitzClass *klass)
 	GtkWidgetClass *class = GTK_WIDGET_CLASS (klass);
 
 	class->draw = gtk_glitz_draw;
+
+	g_type_class_add_private (class, sizeof (GtkGlitzPrivate));
 }
 
 static void
 gtk_glitz_init (GtkGlitz *glitz)
 {
 	gtk_widget_set_has_window (GTK_WIDGET (glitz), FALSE);
+
+	GtkGlitzPrivate *priv = GTK_GLITZ_GET_PRIVATE (glitz);
+
+	priv->width = gtk_widget_get_allocated_width (GTK_WIDGET (glitz));
+	priv->height = gtk_widget_get_allocated_height (GTK_WIDGET (glitz));
+	priv->pixbuf = load_background("./image.png",
+				gtk_ldesk_get_width (GTK_LDESK (priv->ldesk)),
+				gtk_ldesk_get_height (GTK_LDESK (priv->ldesk)));
 }
 
 GtkWidget*
-gtk_glitz_new (void)
+gtk_glitz_new (GtkWidget *ldesk)
 {
-	return g_object_new (GTK_TYPE_GLITZ, NULL);
+	GtkWidget *glitz = g_object_new (GTK_TYPE_GLITZ, NULL);
+
+	GtkGlitzPrivate *priv = GTK_GLITZ_GET_PRIVATE (glitz);
+	priv->ldesk = ldesk;
+
+	return glitz;
 }
