@@ -1,7 +1,7 @@
 LDesk
 ====
 
-A very pre-alpha desktop wallpaper app for \*nix inspired by LCARS.
+A very pre-alpha GTK3 desktop wallpaper app for \*nix inspired by LCARS.
 
 Screenshot
 ------
