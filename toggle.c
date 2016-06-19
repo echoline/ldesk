@@ -1,8 +1,14 @@
 #include "toggle.h"
+#include "ldesk.h"
 
-void refresh_box ();
-extern GtkWidget *panes[];
-extern GtkWidget *bttns[];
+typedef struct _GtkSpaceButtonPrivate GtkSpaceButtonPrivate;
+
+struct _GtkSpaceButtonPrivate
+{
+	GtkWidget *ldesk;
+};
+
+#define GTK_SPACEBUTTON_GET_PRIVATE(obj)	(G_TYPE_INSTANCE_GET_PRIVATE ((obj), GTK_TYPE_SPACEBUTTON, GtkSpaceButtonPrivate))
 
 G_DEFINE_TYPE (GtkSpaceButton, gtk_spacebutton, GTK_TYPE_TOGGLE_BUTTON);
 
@@ -35,30 +41,11 @@ gtk_spacebutton_draw (GtkWidget *spacebutton, cairo_t *cr)
 static void
 gtk_spacebutton_toggled (GtkWidget *spacebutton, gpointer index)
 {
-	gint i;
+	GtkSpaceButtonPrivate *priv = GTK_SPACEBUTTON_GET_PRIVATE 
+					(GTK_SPACEBUTTON (spacebutton));
 
-	if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (
-					bttns[(gsize)index])))
-		for (i = 0; i < 3; i++)
-		{
-			if (i == (gsize)index)
-			{
-				gtk_widget_show (panes[i]);
-				gtk_widget_hide (panes[3]);
-			}
-			else
-			{
-				gtk_toggle_button_set_active (
-					GTK_TOGGLE_BUTTON (bttns[i]), FALSE);
-				gtk_widget_hide (panes[i]);
-			}
-		}
-	else {
-		gtk_widget_hide (panes[(gsize)index]);
-		gtk_widget_show (panes[3]);
-	}
-
-	refresh_box ();
+	gtk_ldesk_update_buttons (priv->ldesk, (gsize)index);
+	gtk_ldesk_refresh_box (priv->ldesk);
 }
 
 static void
@@ -67,6 +54,8 @@ gtk_spacebutton_class_init (GtkSpaceButtonClass *klass)
 	GtkWidgetClass *class = GTK_WIDGET_CLASS (klass);
 
 	class->draw = gtk_spacebutton_draw;
+
+	g_type_class_add_private (class, sizeof (GtkSpaceButtonPrivate));
 }
 
 static void
@@ -82,7 +71,11 @@ gtk_spacebutton_init (GtkSpaceButton *spacebutton)
 }
 
 GtkWidget*
-gtk_spacebutton_new ()
+gtk_spacebutton_new (GtkWidget *ldesk)
 {
-	return g_object_new (GTK_TYPE_SPACEBUTTON, NULL);
+	GtkWidget *spacebutton = g_object_new (GTK_TYPE_SPACEBUTTON, NULL);
+	GtkSpaceButtonPrivate *priv = GTK_SPACEBUTTON_GET_PRIVATE 
+					(GTK_SPACEBUTTON (spacebutton));
+	priv->ldesk = ldesk;
+	return spacebutton;
 }

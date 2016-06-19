@@ -26,6 +26,8 @@ struct _GtkLDeskClass
 #define GTK_IS_LDESK_CLASS(obj)	(G_TYPE_CHECK_CLASS_TYPE ((obj), GTK_TYPE_LDESK))
 #define GTK_LDESK_GET_CLASS	(G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_LDESK, GtkLDeskClass))
 
-GtkWidget* gtk_ldesk_new (GtkWidget **panes);
+GtkWidget* gtk_ldesk_new (gint width, gint height);
+void gtk_ldesk_refresh_box (GtkWidget *ldesk);
+void gtk_ldesk_update_buttons(GtkWidget *ldesk, gsize index);
 
 #endif // __LDESK_H
