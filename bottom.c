@@ -1,13 +1,12 @@
 #include "bottom.h"
-// TODO this widget is still called bubble
 
-G_DEFINE_TYPE (GtkBubble, gtk_bubble, GTK_TYPE_DRAWING_AREA);
+G_DEFINE_TYPE (GtkBottom, gtk_bottom, GTK_TYPE_DRAWING_AREA);
 
 static gboolean
-gtk_bubble_draw (GtkWidget *bubble, cairo_t *cr)
+gtk_bottom_draw (GtkWidget *bottom, cairo_t *cr)
 {
-	gint width = gtk_widget_get_allocated_width (bubble);
-	gint height = gtk_widget_get_allocated_height (bubble);
+	gint width = gtk_widget_get_allocated_width (bottom);
+	gint height = gtk_widget_get_allocated_height (bottom);
 	gdouble radius = height/2;
 	gdouble margin = 10;
 	gdouble x = radius;
@@ -41,21 +40,21 @@ gtk_bubble_draw (GtkWidget *bubble, cairo_t *cr)
 }
 
 static void
-gtk_bubble_class_init (GtkBubbleClass *klass)
+gtk_bottom_class_init (GtkBottomClass *klass)
 {
 	GtkWidgetClass *class = GTK_WIDGET_CLASS (klass);
 
-	class->draw = gtk_bubble_draw;
+	class->draw = gtk_bottom_draw;
 }
 
 static void
-gtk_bubble_init (GtkBubble *bubble)
+gtk_bottom_init (GtkBottom *bottom)
 {
-	gtk_widget_set_has_window (GTK_WIDGET (bubble), FALSE);
+	gtk_widget_set_has_window (GTK_WIDGET (bottom), FALSE);
 }
 
 GtkWidget*
-gtk_bubble_new (void)
+gtk_bottom_new (void)
 {
-	return g_object_new (GTK_TYPE_BUBBLE, NULL);
+	return g_object_new (GTK_TYPE_BOTTOM, NULL);
 }

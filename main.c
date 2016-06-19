@@ -1,15 +1,16 @@
 #include <gtk/gtk.h>
 #include <gtk/gtkx.h>
 #include "ldesk.h"
-
-gint width, height;
+#include "screens.h"
 
 int
 main (int argc, char **argv)
 {
 	GtkWidget *root;
+	GtkWidget *fixed;
 	GtkWidget *desktop;
 	gint i;
+	gint width, height;
 
 	gtk_init (&argc, &argv);
 
@@ -27,8 +28,20 @@ main (int argc, char **argv)
 
 	gtk_widget_set_size_request (root, width, height);
 
-	desktop = gtk_ldesk_new (width, height);
-	gtk_container_add (GTK_CONTAINER (root), desktop);
+	fixed = gtk_screens_new ();
+	gtk_container_add (GTK_CONTAINER (root), fixed);
+
+	GdkScreen *screen = gdk_screen_get_default ();
+
+	for (i = 0; i < gdk_screen_get_n_monitors (screen); i++) {
+		GdkRectangle rect;
+
+		gdk_screen_get_monitor_geometry (screen, i, &rect);
+
+		desktop = gtk_ldesk_new (rect.width, rect.height);
+		
+		gtk_fixed_put (GTK_FIXED (fixed), desktop, rect.x, rect.y);
+	}
 
 	gtk_widget_show_all (root);
 

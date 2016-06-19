@@ -136,7 +136,7 @@ gtk_ldesk_new (gint width, gint height)
 	gtk_fixed_put (GTK_FIXED (desktop), box, 25, 100);
 	gtk_widget_set_size_request (box, width - 300, height - 100);
 
-	widget = GTK_WIDGET(gtk_bubble_new ());
+	widget = GTK_WIDGET(gtk_bottom_new ());
 	gtk_widget_set_size_request (widget, width - 50, 50);
 	gtk_fixed_put (GTK_FIXED (desktop), widget, 25, height - 75);
 

@@ -66,7 +66,9 @@ gtk_spacebutton_init (GtkSpaceButton *spacebutton)
 	gtk_widget_set_has_window (GTK_WIDGET (spacebutton), FALSE);
 
 	g_signal_connect (spacebutton, "toggled",
-			G_CALLBACK (gtk_spacebutton_toggled), (gpointer)index);
+			G_CALLBACK (gtk_spacebutton_toggled), (gpointer)(index
+
+					% 3)); // EBC TODO
 	index++;
 }
 

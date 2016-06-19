@@ -10,6 +10,10 @@ gtk_files_draw (GtkWidget *files, cairo_t *cr)
 	gint height = gtk_widget_get_allocated_height (files);
 	cairo_set_font_size (cr, 20);
 
+	cairo_set_source_rgb (cr, 0, 0, 0);
+	cairo_rectangle(cr, 0, 0, width, height);
+	cairo_fill (cr);
+
 	cairo_set_source_rgb (cr, .8, .4, .4);
 	cairo_rectangle (cr, 0, 0, width, 50);
 	cairo_fill (cr);
@@ -50,5 +54,7 @@ gtk_files_init (GtkFiles *files)
 GtkWidget*
 gtk_files_new (void)
 {
-	return g_object_new (GTK_TYPE_FILES, NULL);
+	GtkWidget *ret = g_object_new (GTK_TYPE_FILES, NULL);
+
+	return ret;
 }
