@@ -2,6 +2,8 @@
 #include "image.xpm"
 
 static char *lines[] = { "ALL SYSTEMS TREKKED OUT",
+			 "(AUTHOR OF PICTURE NOT ON FILE:",
+			 "PLEASE CONTACT ME FOR RECOGNITION)",
 			NULL };
 
 G_DEFINE_TYPE (GtkGlitz, gtk_glitz, GTK_TYPE_DRAWING_AREA);
