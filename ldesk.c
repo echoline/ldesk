@@ -15,13 +15,12 @@
  */
 #include "ldesk.h"
 #include "bottom.h"
-#include "comms.h"
 #include "glitz.h"
 #include "right.h"
 #include "rprts.h"
-#include "stats.h"
 #include "toggle.h"
 #include "top.h"
+#include "panes.h"
 
 typedef struct _GtkLDeskPrivate GtkLDeskPrivate;
 
@@ -74,7 +73,7 @@ gtk_ldesk_refresh_box(GtkWidget *ldesk)
 	gboolean used = FALSE;
 	gint i;
 
-	for (i = 0; i < 3; i++)
+	for (i = 1; i < NUM_PANES; i++)
 		if (gtk_widget_get_visible (priv->panes[i]))
 		{
 			gtk_widget_set_size_request (priv->panes[i],
@@ -86,10 +85,10 @@ gtk_ldesk_refresh_box(GtkWidget *ldesk)
 			gtk_widget_set_size_request (priv->panes[i], 0,
 							priv->height - 100);
 	if (!used)
-		gtk_widget_set_size_request (priv->panes[3], priv->width - 300,
+		gtk_widget_set_size_request (priv->panes[0], priv->width - 300,
 						priv->height - 100);
 	else
-		gtk_widget_set_size_request (priv->panes[3], 0,
+		gtk_widget_set_size_request (priv->panes[0], 0,
 						priv->height - 100);
 }
 
@@ -101,24 +100,24 @@ gtk_ldesk_update_buttons(GtkWidget *ldesk, gsize index)
 
 	if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (
 					priv->bttns[index])))
-		for (i = 0; i < 3; i++)
+		for (i = 1; i < NUM_PANES; i++)
 		{
-			if (i == index)
+			if (i == (index + 1))
 			{
 				gtk_widget_show (priv->panes[i]);
-				gtk_widget_hide (priv->panes[3]);
+				gtk_widget_hide (priv->panes[0]);
 			}
 			else
 			{
 				gtk_toggle_button_set_active (
-					GTK_TOGGLE_BUTTON (priv->bttns[i]),
-									FALSE);
+					GTK_TOGGLE_BUTTON (priv->bttns[i-1]),
+								FALSE);
 				gtk_widget_hide (priv->panes[i]);
 			}
 		}
 	else {
-		gtk_widget_hide (priv->panes[index]);
-		gtk_widget_show (priv->panes[3]);
+		gtk_widget_hide (priv->panes[index + 1]);
+		gtk_widget_show (priv->panes[0]);
 	}
 }
 
@@ -140,41 +139,24 @@ gtk_ldesk_new (gint width, gint height)
 	gtk_fixed_put (GTK_FIXED (desktop), widget, 25, 25);
 
 	box = GTK_WIDGET (gtk_box_new (GTK_ORIENTATION_HORIZONTAL, TRUE));
-	priv->panes[0] = gtk_comms_new ();
+	priv->panes[0] = gtk_glitz_new ();
+	priv->panes[1] = gtk_rprts_new ();
 	gtk_container_add (GTK_CONTAINER (box), priv->panes[0]);
-	priv->panes[1] = gtk_stats_new ();
 	gtk_container_add (GTK_CONTAINER (box), priv->panes[1]);
-	priv->panes[2] = gtk_rprts_new ();
-	gtk_container_add (GTK_CONTAINER (box), priv->panes[2]);
-	priv->panes[3] = gtk_glitz_new ();
-	gtk_container_add (GTK_CONTAINER (box), priv->panes[3]);
 	gtk_fixed_put (GTK_FIXED (desktop), box, 25, 100);
 	gtk_widget_set_size_request (box, width - 300, height - 100);
-
-	widget = GTK_WIDGET(gtk_bottom_new ());
-	gtk_widget_set_size_request (widget, width - 50, 50);
-	gtk_fixed_put (GTK_FIXED (desktop), widget, 25, height - 75);
 
 	widget = GTK_WIDGET(gtk_files_new ());
 	gtk_widget_set_size_request (widget, 240, height - 150);
 	gtk_fixed_put (GTK_FIXED (desktop), widget, width - 265, 75);
 
-	priv->bttns[0] = GTK_WIDGET(gtk_spacebutton_new (desktop));
-	gtk_button_set_label (GTK_BUTTON (priv->bttns[0]), "COMMUNICATIONS");
-	gtk_widget_set_size_request (priv->bttns[0], 215, 50);
-	gtk_fixed_put (GTK_FIXED (desktop), priv->bttns[0], width - 240, height - 355);
+	priv->bttns[0] = GTK_WIDGET(gtk_spacebutton_new (desktop, "CONFIG"));
+	gtk_fixed_put (GTK_FIXED (desktop), priv->bttns[0], width - 240, height - 235);
+	widget = GTK_WIDGET(gtk_bottom_new ());
+	gtk_widget_set_size_request (widget, width - 50, 50);
+	gtk_fixed_put (GTK_FIXED (desktop), widget, 25, height - 75);
 
-	priv->bttns[1] = GTK_WIDGET(gtk_spacebutton_new (desktop));
-	gtk_button_set_label (GTK_BUTTON (priv->bttns[1]), "OPERATIONS");
-	gtk_widget_set_size_request (priv->bttns[1], 215, 50);
-	gtk_fixed_put (GTK_FIXED (desktop), priv->bttns[1], width - 240, height - 295);
-
-	priv->bttns[2] = GTK_WIDGET(gtk_spacebutton_new (desktop));
-	gtk_button_set_label (GTK_BUTTON (priv->bttns[2]), "ENGINEERING");
-	gtk_widget_set_size_request (priv->bttns[2], 215, 50);
-	gtk_fixed_put (GTK_FIXED (desktop), priv->bttns[2], width - 240, height - 235);
-
-	for (i = 0; i < 3; i++)
+	for (i = 1; i < NUM_PANES; i++)
 		gtk_widget_hide (priv->panes[i]);
 	gtk_ldesk_refresh_box(desktop);
 	

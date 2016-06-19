@@ -15,6 +15,7 @@
  */
 #include "toggle.h"
 #include "ldesk.h"
+#include "panes.h"
 
 typedef struct _GtkSpaceButtonPrivate GtkSpaceButtonPrivate;
 
@@ -81,18 +82,19 @@ gtk_spacebutton_init (GtkSpaceButton *spacebutton)
 	gtk_widget_set_has_window (GTK_WIDGET (spacebutton), FALSE);
 
 	g_signal_connect (spacebutton, "toggled",
-			G_CALLBACK (gtk_spacebutton_toggled), (gpointer)(index
-
-					% 3)); // EBC TODO
+			G_CALLBACK (gtk_spacebutton_toggled),
+			(gpointer)(index % (NUM_PANES - 1)));
 	index++;
 }
 
 GtkWidget*
-gtk_spacebutton_new (GtkWidget *ldesk)
+gtk_spacebutton_new (GtkWidget *ldesk, gchar *label)
 {
 	GtkWidget *spacebutton = g_object_new (GTK_TYPE_SPACEBUTTON, NULL);
 	GtkSpaceButtonPrivate *priv = GTK_SPACEBUTTON_GET_PRIVATE 
 					(GTK_SPACEBUTTON (spacebutton));
 	priv->ldesk = ldesk;
+	gtk_button_set_label (GTK_BUTTON (spacebutton), label);
+	gtk_widget_set_size_request (spacebutton, 215, 50);
 	return spacebutton;
 }

@@ -14,6 +14,7 @@
  *  along with LDesk.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "right.h"
+#include "panes.h"
 
 G_DEFINE_TYPE (GtkFiles, gtk_files, GTK_TYPE_BOX);
 
@@ -30,7 +31,7 @@ gtk_files_draw (GtkWidget *files, cairo_t *cr)
 	cairo_fill (cr);
 
 	cairo_set_source_rgb (cr, .8, .4, .4);
-	cairo_rectangle (cr, 0, 0, width, 50);
+	cairo_rectangle (cr, 0, 0, width, 30);
 	cairo_fill (cr);
 
 	cairo_set_source_rgb (cr, .8, .6, .8);
@@ -38,7 +39,8 @@ gtk_files_draw (GtkWidget *files, cairo_t *cr)
 	cairo_fill (cr);
 
 	cairo_set_source_rgb (cr, .6, .6, .8);
-	cairo_rectangle (cr, 0, 95, width, height - 385);
+	cairo_rectangle (cr, 0, 95, width,
+			height - (25 + ((215 + 25) * (NUM_PANES - 1))));
 	cairo_rectangle (cr, 0, height - 100, width, 100);
 	cairo_fill (cr);
 

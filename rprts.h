@@ -15,6 +15,7 @@
  */
 #ifndef __RPRTS_H
 #define __RPRTS_H
+#define MODULES_MESSAGE "UNIMPLEMENTED"
 
 #include <gtk/gtk.h>
 #include <math.h>

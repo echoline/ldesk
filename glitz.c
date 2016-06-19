@@ -14,7 +14,7 @@
  *  along with LDesk.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "glitz.h"
-#include "image.xpm"
+#include "image.h"
 
 static char *lines[] = { "ALL SYSTEMS TREKKED OUT",
 			 "(AUTHOR OF PICTURE NOT ON FILE:",

@@ -64,9 +64,9 @@ gtk_rprts_draw (GtkWidget *rprts, cairo_t *cr)
 	cairo_set_font_size (cr, 25);
 	cairo_set_source_rgb (cr, 1, .6, 0);
 
-	cairo_text_extents (cr, "NOTHING TO REPORT", &extents);
+	cairo_text_extents (cr, MODULES_MESSAGE, &extents);
 	cairo_move_to (cr, 25, 25);
-	cairo_show_text (cr, "NOTHING TO REPORT");
+	cairo_show_text (cr, MODULES_MESSAGE);
 
 	return TRUE;
 }
