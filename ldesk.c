@@ -78,7 +78,7 @@ gtk_ldesk_refresh_box(GtkWidget *ldesk)
 		{
 			gtk_widget_set_size_request (priv->panes[i],
 							priv->width - 300,
-							priv->height - 100);
+							priv->height - 150);
 			used = TRUE;
 		}
 		else
@@ -134,7 +134,7 @@ gtk_ldesk_new (gint width, gint height)
 	priv->width = width;
 	priv->height = height;
 
-	widget = GTK_WIDGET(gtk_clock_new ());
+	widget = GTK_WIDGET (gtk_clock_new ());
 	gtk_widget_set_size_request (widget, width - 50, 50);
 	gtk_fixed_put (GTK_FIXED (desktop), widget, 25, 25);
 
@@ -150,11 +150,13 @@ gtk_ldesk_new (gint width, gint height)
 	gtk_widget_set_size_request (widget, 240, height - 150);
 	gtk_fixed_put (GTK_FIXED (desktop), widget, width - 265, 75);
 
-	priv->bttns[0] = GTK_WIDGET(gtk_spacebutton_new (desktop, "CONFIG"));
-	gtk_fixed_put (GTK_FIXED (desktop), priv->bttns[0], width - 240, height - 235);
 	widget = GTK_WIDGET(gtk_bottom_new ());
 	gtk_widget_set_size_request (widget, width - 50, 50);
 	gtk_fixed_put (GTK_FIXED (desktop), widget, 25, height - 75);
+
+	priv->bttns[0] = GTK_WIDGET(gtk_spacebutton_new (desktop, "CONFIG"));
+	gtk_fixed_put (GTK_FIXED (desktop), priv->bttns[0], width - 240,
+								height - 235);
 
 	for (i = 1; i < NUM_PANES; i++)
 		gtk_widget_hide (priv->panes[i]);
