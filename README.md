@@ -6,7 +6,7 @@ A desktop wallpaper app for \*nix inspired by LCARS.
 Screenshot
 ------
 
-![http://i.imgur.com/BO4cpM4.png](http://i.imgur.com/BO4cpM4.png)
+![http://i.imgur.com/ZWQSyIV.png](http://i.imgur.com/ZWQSyIV.png)
 
 Project Page
 ---------
