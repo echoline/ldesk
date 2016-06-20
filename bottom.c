@@ -1,19 +1,8 @@
-/*  This file is part of LDesk
- *
- *  LDesk is free software: you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation, either version 3 of the License, or
- *  (at your option) any later version.
- *
- *  LDesk is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with LDesk.  If not, see <http://www.gnu.org/licenses/>.
- */
 #include "bottom.h"
+#include <string.h>
+// TODO this widget is still called bottom
+
+gchar *hostname;
 
 G_DEFINE_TYPE (GtkBottom, gtk_bottom, GTK_TYPE_DRAWING_AREA);
 
@@ -28,6 +17,9 @@ gtk_bottom_draw (GtkWidget *bottom, cairo_t *cr)
 
 	cairo_text_extents_t extents;
 	cairo_set_font_size (cr, height);
+	cairo_set_source_rgb (cr, 0, 0, 0);
+	cairo_rectangle (cr, 0, 0, width, height);
+	cairo_fill (cr);
 
 	// blue left cap
 	cairo_set_source_rgb (cr, 0.6, 0.6, 0.8);
@@ -37,10 +29,10 @@ gtk_bottom_draw (GtkWidget *bottom, cairo_t *cr)
 
 	// ONLINE
 	x += margin * 3;
-	cairo_text_extents (cr, "CONSOLE X11", &extents);
+	cairo_text_extents (cr, hostname, &extents);
 	cairo_set_source_rgb (cr, 1, 0.6, 0);
 	cairo_move_to (cr, x, height - margin * 2/3);
-	cairo_show_text (cr, "CONSOLE X11");
+	cairo_show_text (cr, hostname);
 	cairo_fill (cr);
 
 	// moar blue
@@ -58,8 +50,14 @@ static void
 gtk_bottom_class_init (GtkBottomClass *klass)
 {
 	GtkWidgetClass *class = GTK_WIDGET_CLASS (klass);
+	gchar *tmp;
 
 	class->draw = gtk_bottom_draw;
+
+	g_file_get_contents ("/etc/hostname", &tmp, NULL, NULL);
+	hostname = g_utf8_strup(tmp, -1);
+	g_free (tmp);
+	hostname[strcspn(hostname, "\r\n")] = '\0';
 }
 
 static void
