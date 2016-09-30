@@ -69,12 +69,8 @@ gtk_clock_draw (GtkWidget *clock, cairo_t *cr)
 	gchar *ptr;
 
 	g_strstrip (nowstr);
-	ptr = nowstr;
-	while (*ptr)
-	{
-		*ptr = g_ascii_toupper(*ptr);
-		ptr++;
-	}
+	ptr = g_utf8_strup (nowstr, -1);
+	nowstr = ptr;
 
 	cairo_set_font_size (cr, height);
 

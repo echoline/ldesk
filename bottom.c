@@ -54,10 +54,9 @@ gtk_bottom_class_init (GtkBottomClass *klass)
 
 	class->draw = gtk_bottom_draw;
 
-	g_file_get_contents ("/etc/hostname", &tmp, NULL, NULL);
-	hostname = g_utf8_strup(tmp, -1);
-	g_free (tmp);
-	hostname[strcspn(hostname, "\r\n")] = '\0';
+	hostname = g_malloc(1024);
+	gethostname(hostname, 1024);
+	hostname[1023] = '\0';
 }
 
 static void
